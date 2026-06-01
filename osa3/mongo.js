@@ -48,7 +48,5 @@ else if (process.argv.length === 5) {
 
 else {
   console.log('Invalid number of arguments. Use:')
-  console.log('node mongo.js <password>  (to list all)')
-  console.log('node mongo.js <password> <name> <number>  (to add a new entry)')
   mongoose.connection.close()
 }

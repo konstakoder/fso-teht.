@@ -9,7 +9,7 @@ if (process.argv.length < 3) {
 
 const password = process.argv[2]
 
-const uri = `mongodb+srv://konstakorsu_db_user:${password}@cluster0.e6cptsg.mongodb.net/?appName=Cluster0`;
+const uri = `mongodb+srv://konstakorsu_db_user:${password}@cluster0.e6cptsg.mongodb.net/test?appName=Cluster0`;
 
 mongoose.set('strictQuery', false)
 mongoose.connect(uri)

@@ -14,7 +14,6 @@ app.use(morgan(':method :url :status :res[content-length] - :response-time ms :b
 
 
 
-
 app.get('/api/persons', async (request, response, next) => {
   try {
     const persons = await Person.find({})

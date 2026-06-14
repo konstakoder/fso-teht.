@@ -1,9 +1,10 @@
 POST http://localhost:3003/api/blogs
 Content-Type: application/json
+Authorization: Bearer TOKEN
 
 {
-  "title": "React patterns",
-  "author": "Michael Chan",
-  "url": "https://reactpatterns.com/",
-  "likes": 7
+  "title": "Token-testi",
+  "author": "Testi",
+  "url": "https://example.com",
+  "likes": 3
 }

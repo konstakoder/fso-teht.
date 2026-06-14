@@ -1,0 +1,13 @@
+
+
+GET http://localhost:3003/api/blogs
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3R1c2VyMyIsImlkIjoiNmEyZTg3NmFiYzE0MWE2ODRlMDM1ZTJmIiwiaWF0IjoxNzgxNDM0NDM1LCJleHAiOjE3ODE0MzgwMzV9.iJrsBPoW9BfDGOU1lKFRH6jYs7rByBBYmy3Z5bxR1f8
+
+{
+  "title": "Token-testi",
+  "author": "Testi",
+  "url": "https://example.com",
+  "likes": 1
+}
+

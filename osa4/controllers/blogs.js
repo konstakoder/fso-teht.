@@ -1,36 +1,65 @@
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
+const User = require('../models/user')
+const jwt = require('jsonwebtoken')
+const { userExtractor } = require('../utils/middleware')
+
 
 blogsRouter.get('/', async (request, response) => {
-  const blogs = await Blog.find({})
+  const blogs = await Blog.find({}).populate('user', { username: 1, name: 1, id: 1 })
   response.json(blogs)
 })
 
-blogsRouter.post('/', async (request, response, next) => {
+const getTokenFrom = request => {
+  const authorization = request.get('authorization')
+    if (authorization && authorization.startsWith('Bearer ')) {
+    return authorization.replace('Bearer ', '')
+  }
+  return null
+}
+
+blogsRouter.post('/', userExtractor, async (request, response, next) => {
   const body = request.body
+  const user = request.user
 
   if (!body.title || !body.url) {
     return response.status(400).json({ error: 'title and url are required' })
   }
 
-  const blog = new Blog({
-    title: body.title,
-    author: body.author,
-    url: body.url,
-    likes: body.likes ?? 0,
-  })
-
   try {
+    const blog = new Blog({
+      title: body.title,
+      author: body.author,
+      url: body.url,
+      likes: body.likes ?? 0,
+      user: user._id
+    })
+
     const savedBlog = await blog.save()
+    user.blogs = user.blogs.concat(savedBlog._id)
+    await user.save()
+
     response.status(201).json(savedBlog)
   } catch (error) {
     next(error)
   }
 })
 
-blogsRouter.delete('/:id', async (request, response, next) => {
+blogsRouter.delete('/:id', userExtractor, async (request, response, next) => {
+  const user = request.user 
+
   try {
-    await Blog.findByIdAndDelete(request.params.id)
+    const blog = await Blog.findById(request.params.id)
+
+    if (!blog) {
+      return response.status(404).json({ error: 'blog not found' })
+    }
+
+    if (blog.user.toString() !== user._id.toString()) {
+      return response.status(403).json({ error: 'only the creator can delete this blog' })
+    }
+
+    await blog.deleteOne()
     response.status(204).end()
   } catch (error) {
     next(error)
